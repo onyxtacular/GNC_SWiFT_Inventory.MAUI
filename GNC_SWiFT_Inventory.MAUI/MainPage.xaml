@@ -4,38 +4,50 @@
              xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
              x:Class="GNC_SWiFT_Inventory.MAUI.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <Grid RowDefinitions="1*,3*,1*">
 
-            <zxing:CameraBarcodeReaderView x:Name="barcodeReader" 
-                 WidthRequest="200" HeightRequest="200"
-              IsDetecting="True" IsTorchOn="False" BarcodesDetected="CameraBarcodeReaderView_BarcodesDetected" />
+        <zxing:CameraBarcodeReaderView Grid.Row="0"
+                                       Grid.RowSpan="3"
+                                       x:Name="barcodeView"
+                                       BarcodesDetected="BarcodesDetected" />
 
-            <Label
-                x:Name="barcodeResult"
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+        <Grid Grid.Row="0"
+              BackgroundColor="#aa000000">
+            <Label Text="Top text..."
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="White" />
+        </Grid>
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+        <Grid Grid.Row="3"
+              BackgroundColor="#aa000000"
+              Padding="20"
+              ColumnDefinitions="Auto,*,Auto">
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+            <Button Text="🔄️"
+                    Grid.Column="0"
+                    BackgroundColor="#aa000000"
+                    CornerRadius="8"
+                    BorderColor="Black"
+                    Clicked="SwitchCameraButton_Clicked" />
 
-        </VerticalStackLayout>
-    </ScrollView>
+            <zxing:BarcodeGeneratorView x:Name="barcodeGenerator"
+                                        Grid.Column="1"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        HeightRequest="100"
+                                        WidthRequest="100"
+                                        ForegroundColor="DarkBlue"
+                                        Format="QrCode"
+                                        Value="Bla"
+                                        BarcodeMargin="1" />
 
+            <Button Text="💡"
+                    Grid.Column="2"
+                    BackgroundColor="#aa000000"
+                    CornerRadius="8"
+                    BorderColor="Black"
+                    Clicked="TorchButton_Clicked" />
+        </Grid>
+    </Grid>
 </ContentPage>
