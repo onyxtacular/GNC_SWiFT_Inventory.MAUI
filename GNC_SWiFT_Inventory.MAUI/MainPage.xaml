@@ -13,7 +13,8 @@
 
         <Grid Grid.Row="0"
               BackgroundColor="#aa000000">
-            <Label Text="Top text..."
+            <Label x:Name="ResultLabel"
+                   Text="Pending scan..."
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    TextColor="White" />

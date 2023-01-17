@@ -1,5 +1,6 @@
 ﻿using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
+using ZXing.QrCode.Internal;
 
 namespace GNC_SWiFT_Inventory.MAUI;
 
@@ -31,6 +32,7 @@ public partial class MainPage : ContentPage
                 barcodeGenerator.ClearValue(BarcodeGeneratorView.ValueProperty);
                 barcodeGenerator.Format = first.Format;
                 barcodeGenerator.Value = first.Value;
+                ResultLabel.Text = $"Barcodes: {first.Format} -> {first.Value}";
             });
         }
     }
