@@ -1,47 +1,50 @@
 ﻿using ZXing.Net.Maui;
+using ZXing.Net.Maui.Controls;
+using ZXing.QrCode.Internal;
 
 namespace GNC_SWiFT_Inventory.MAUI;
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
-
     public MainPage()
     {
         InitializeComponent();
-       
-        barcodeReader.Options = new ZXing.Net.Maui.BarcodeReaderOptions()
+
+        barcodeView.Options = new BarcodeReaderOptions
         {
-            Formats = BarcodeFormat.Code39
+            Formats = BarcodeFormats.All,
+            AutoRotate = true,
+            Multiple = true
         };
     }
 
-    private void OnCounterClicked(object sender, EventArgs e)
+    protected void BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
     {
-        count++;
+        foreach (var barcode in e.Results)
+            Console.WriteLine($"Barcodes: {barcode.Format} -> {barcode.Value}");
 
-        if (count == 1)
-            CounterBtn.Text = $"Clicked {count} time";
-        else
-            CounterBtn.Text = $"Clicked {count} times";
+        var first = e.Results?.FirstOrDefault();
 
-        SemanticScreenReader.Announce(CounterBtn.Text);
-    }
-
-    private void CameraBarcodeReaderView_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
-    {
-        Dispatcher.Dispatch(() =>
-         {
-       barcodeResult.Text = $"{e.Results[0].Value} {e.Results[0].Format}";
-         });
-    }
-
-    private void barcodeReader_BarcodesDetected(object sender, ZXing.Net.Maui.BarcodeDetectionEventArgs e)
-    {
-        Dispatcher.Dispatch(() =>
+        if (first is not null)
         {
-            barcodeResult.Text = $"{e.Results[0].Value} {e.Results[0].Format}";
-        });
+            Dispatcher.Dispatch(() =>
+            {
+                barcodeGenerator.ClearValue(BarcodeGeneratorView.ValueProperty);
+                barcodeGenerator.Format = first.Format;
+                barcodeGenerator.Value = first.Value;
+                ResultLabel.Text = $"Barcodes: {first.Format} -> {first.Value}";
+            });
+        }
+    }
+
+    void SwitchCameraButton_Clicked(object sender, EventArgs e)
+    {
+        barcodeView.CameraLocation = barcodeView.CameraLocation == CameraLocation.Rear ? CameraLocation.Front : CameraLocation.Rear;
+    }
+
+    void TorchButton_Clicked(object sender, EventArgs e)
+    {
+        barcodeView.IsTorchOn = !barcodeView.IsTorchOn;
     }
 }
 
